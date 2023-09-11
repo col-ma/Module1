@@ -132,3 +132,67 @@ BOOL GetTrueFullPath(WCHAR* lpcwFilePath, LPCWSTR lpcwFullPath)
 
     return AssembleFinalFullLongPath(lpcwPrevParsedPath, lpcwPrevCurrentSteps, lpcwFullPath, bCurrentParsedPathIsValid);
 }
+
+PATHS_T StripAllUNCPathLayers(LPCWSTR lpcwPath)
+{
+    WCHAR lpwcFullFilePath[MAX_PATH] = { 0 };
+    PATHS_T pathUNCError;
+
+    do
+    {
+        pathUNCError = GetLocalPathFromUncPath(lpcwPath);
+
+        if (pathUNCError != VALID_PATH)
+        {
+            return pathUNCError;
+        }
+
+        if (!GetTrueFullPath(lpcwPath, lpwcFullFilePath))
+        {
+            return INVALID_PATH_NAME;
+        }
+
+        wcscpy_s(lpcwPath, (wcslen(lpwcFullFilePath) + 1), lpwcFullFilePath);
+    } while (PathIsUNC(lpcwPath));
+
+    return VALID_PATH;
+}
+
+PATHS_T AssembleFullPath(LPCWSTR lpcwFilePath)
+{
+    WCHAR lpwcExpandedFilePath[MAX_PATH] = { 0 };
+    WCHAR lpwcBasicFilePath[MAX_PATH] = { 0 };
+
+    PATHS_T pathUNCError;
+
+    ExpendAllEnvironmentVariables(lpcwFilePath);
+
+    if (!HandleSpecialCharacters(lpcwFilePath))
+    {
+        return INVALID_CHARACTERS_IN_PATH;
+    }
+
+    if (ExpandEnvironmentStrings(lpcwFilePath, lpwcExpandedFilePath, MAX_PATH) == 0)
+    {
+        DWORD dwExpandEnvironmentStringsError = GetLastError();
+
+        wprintf_s(L"[ExpandEnvironmentStrings Error] : %x\n", dwExpandEnvironmentStringsError);
+
+        return INVALID_PATH_NAME;
+    }
+
+    GetFullPathName(lpwcExpandedFilePath, MAX_PATH, lpwcBasicFilePath, NULL);
+
+    AssertRegularPrepend(lpwcBasicFilePath);
+
+    pathUNCError = StripAllUNCPathLayers(lpwcBasicFilePath);
+
+    if (pathUNCError != VALID_PATH)
+    {
+        return pathUNCError;
+    }
+
+    wcscpy_s(lpcwFilePath, (wcslen(lpwcBasicFilePath) + 1), lpwcBasicFilePath);
+
+    return VALID_PATH;
+}

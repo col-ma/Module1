@@ -1,5 +1,9 @@
 #include <Windows.h>
+
 #include "PathParser.h"
+#include "PathTypes.h"
+#include "UNCPathHandling.h"
+#include "EnvironmentVariableHandling.h"
 
 // Creates the true and final path by opening the file.
 DWORD GetFinalPathByExistingFile(LPCWSTR lpcwFilePath, LPCWSTR lpcwFinalPath);
@@ -12,3 +16,7 @@ BOOL AssembleFinalFullLongPath(LPCWSTR lpcwValidPath, LPCWSTR lpcwNonExistingPat
 
 // Generates the true full path of a file, removing the shortcuts and etc...
 BOOL GetTrueFullPath(WCHAR* lpcwFilePath, LPCWSTR lpcwFullPath);
+
+PATHS_T StripAllUNCPathLayers(LPCWSTR lpcwPath);
+
+PATHS_T AssembleFullPath(LPCWSTR lpcwFilePath);

@@ -28,7 +28,7 @@ DWORD GetLocalPathByUncServerArndSharePath(LPCWSTR lpcwServerName, LPCWSTR lpcwS
     return nasNetShareInfo;
 }
 
-DWORD GetLocalPathFromUncPath(LPCWSTR lpcwPath)
+PATHS_T GetLocalPathFromUncPath(LPCWSTR lpcwPath)
 {
     LPCWSTR lpUNCPrepend = L"\\\\?\\UNC\\";
     LPCWSTR lpRegularUNCPrepend = L"\\\\";
@@ -41,6 +41,11 @@ DWORD GetLocalPathFromUncPath(LPCWSTR lpcwPath)
     if (CheckIfContainedInStart(lpcwPath, lpUNCPrepend))
     {
         wcscpy_s(lpcwPath + wcslen(lpRegularUNCPrepend), wcslen(lpcwPath + wcslen(lpUNCPrepend)) + 1, (lpcwPath + wcslen(lpUNCPrepend)));
+    }
+
+    if (PathIsUNCServer(lpcwPath) || PathIsUNCServerShare(lpcwPath))
+    {
+        return INCOMPLETE_UNC_PATH;
     }
 
     if (PathIsUNC(lpcwPath) && !PathIsUNCServer(lpcwPath) && !PathIsUNCServerShare(lpcwPath))
@@ -63,5 +68,10 @@ DWORD GetLocalPathFromUncPath(LPCWSTR lpcwPath)
         wcscat_s(lpcwPath, wcslen(lpcwPath) + wcslen(lpcwPathCopy) + 1, lpcwPathCopy);
     }
 
-    return dwGetLocalPathByUNC;
+    if(dwGetLocalPathByUNC == ERROR_BAD_NETPATH)
+    {
+        return INVALID_UNC_PATH;
+    }
+
+    return VALID_PATH;
 }

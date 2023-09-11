@@ -1,3 +1,6 @@
+#ifndef __ENVIRONMENT_VARIABLE_HANDLING
+#define __ENVIRONMENT_VARIABLE_HANDLING
+
 #include <Windows.h>
 
 /********************************************
@@ -24,3 +27,5 @@ ENVIRONMENT_VARIABLE_OPERATRION_T DetermineEnvVarOP(LPCWSTR lpcwEnvVar, LPCWSTR 
 BOOL FindEnvironmentVariable(WCHAR* lpcwPath, UINT uInitialIndex);
 
 BOOL ExpendAllEnvironmentVariables(WCHAR* lpcwPath);
+
+#endif //__ENVIRONMENT_VARIABLE_HANDLING

@@ -3,8 +3,6 @@
 
 #include "FileHandling.h"
 #include "PathValidation.h"
-#include "UNCPathHandling.h"
-#include "EnvironmentVariableHandling.h"
 #include "FinalPathGen.h"
 
 #define STDIN_MAX_LINE_SIZE 65536 //Which is 2^16
@@ -23,8 +21,6 @@ enum GET_FILE_PATH_AND_DELETE_ERROR_CODES {
 
 // Gets the file path and from the stdin, and validates the path.
 void GetPathToFile(LPCWSTR filePath);
-
-PATHS_T AssembleFullPath(LPCWSTR lpcwFilePath);
 
 // Chages the path to a format the rest of the program is familiar with and validates it.
 PATHS_T ValidatePath(LPCWSTR filePath);

@@ -11,59 +11,6 @@ void GetPathToFile(LPCWSTR filePath)
     _getws_s(filePath, MAX_PATH);
 }
 
-PATHS_T AssembleFullPath(LPCWSTR lpcwFilePath)
-{
-    WCHAR lpwcExpandedFilePath[MAX_PATH] = {0};
-    WCHAR lpwcFullFilePath[MAX_PATH] = { 0 };
-    WCHAR lpwcBasicFilePath[MAX_PATH] = { 0 };
-
-    ExpendAllEnvironmentVariables(lpcwFilePath);
-
-    if (!HandleSpecialCharacters(lpcwFilePath))
-    {
-        return INVALID_CHARACTERS_IN_PATH;
-    }
-
-    if(ExpandEnvironmentStrings(lpcwFilePath, lpwcExpandedFilePath, MAX_PATH) == 0)
-    {
-        DWORD dwExpandEnvironmentStringsError = GetLastError();
-
-        wprintf_s(L"[ExpandEnvironmentStrings Error] : %x\n", dwExpandEnvironmentStringsError);
-        
-        return INVALID_PATH_NAME;
-    }
-
-    GetFullPathName(lpwcExpandedFilePath, MAX_PATH, lpwcBasicFilePath, NULL);
-
-    AssertRegularPrepend(lpwcBasicFilePath);
-
-    do
-    {
-        if (PathIsUNC(lpwcBasicFilePath) && !PathIsUNCServer(lpwcBasicFilePath) && !PathIsUNCServerShare(lpwcBasicFilePath))
-        {
-            if (GetLocalPathFromUncPath(lpwcBasicFilePath) == ERROR_BAD_NETPATH)
-            {
-                return INVALID_UNC_PATH;
-            }      
-        }
-        else if (PathIsUNCServer(lpwcBasicFilePath) || PathIsUNCServerShare(lpwcBasicFilePath))
-        {
-            return INCOMPLETE_UNC_PATH;
-        }
-
-        if (!GetTrueFullPath(lpwcBasicFilePath, lpwcFullFilePath))
-        {
-            return INVALID_PATH_NAME;
-        }
-
-        wcscpy_s(lpwcBasicFilePath, (wcslen(lpwcFullFilePath) + 1), lpwcFullFilePath);
-    } while (PathIsUNC(lpwcBasicFilePath));
-
-    wcscpy_s(lpcwFilePath, (wcslen(lpwcFullFilePath) + 1), lpwcFullFilePath);
-
-    return VALID_PATH;
-}
-
 PATHS_T ValidatePath(LPCWSTR filePath)
 {
     PATHS_T ptPathValidity;

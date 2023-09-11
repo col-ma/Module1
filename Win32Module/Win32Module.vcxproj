@@ -147,6 +147,7 @@
     <ClInclude Include="FileHandling.h" />
     <ClInclude Include="FinalPathGen.h" />
     <ClInclude Include="PathParser.h" />
+    <ClInclude Include="PathTypes.h" />
     <ClInclude Include="PathValidation.h" />
     <ClInclude Include="SecureUserInterface.h" />
     <ClInclude Include="UNCPathHandling.h" />
