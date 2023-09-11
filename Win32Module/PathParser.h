@@ -23,9 +23,6 @@ void PrepareToSHFileOp(WCHAR* pPathToDirectory);
 /************
  *	Misc	*
  ************/
-// Flushes stdin and ensures there are no new lines in the buffer.
-void SecureStdinFlush();
-
 // Checks if a string is contained in another string.
 BOOL CheckIfContainedInStart(LPCWSTR pBaseStr, LPCWSTR pContainedStr);
 

@@ -1,6 +1,5 @@
 #include "FinalPathGen.h"
 
-
 DWORD GetFinalPathByExistingFile(LPCWSTR lpcwFilePath, LPCWSTR lpcwFinalPath)
 {
     // To handle the directory handle creation.

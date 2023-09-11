@@ -7,17 +7,9 @@
 #include "FinalPathGen.h"
 #include "PathTypes.h"
 
-#define MAX_BUF 1024
-
 /********************
  *	Path Validation	*
  ********************/
-LPCWSTR GetExtention(LPCWSTR lpcwFilePath, LPCWSTR lpcwFileExtention, UINT uFileExtentionBufferSize);
-
-BOOL IsPathExecutableByExtention(LPCWSTR lpcwFilePath);
-BOOL IsPathExecutableByEncodement(LPCWSTR lpcwFilePath);
-BOOL IsPathExecutable(LPCWSTR lpcwFilePath);
-
 // Gets a Path and determines if the path is evil.
 BOOL IsPathEvil(LPCWSTR filePath);
 

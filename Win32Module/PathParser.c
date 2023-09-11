@@ -96,28 +96,6 @@ void PrepareToSHFileOp(WCHAR * pPathToDirectory)
 	EnsureDoubleNullTermination(pPathToDirectory);
 }
 
-/***************************************************************************************
- *	SecureStdinFlush:
- *		Securely flushes stdin stream, ensuring there are no newlines in the buffer,	
- *		to ensure complete control over the next user's input.
- ***************************************************************************************/
-void SecureStdinFlush() 
-{
-	char letter;
-
-	// Standart flush of stdin.
-	fflush(stdin);
-
-	// Just hops over all the newlines.
-	while ((letter = getchar()) == '\n') {}
-	
-	// When the letter is not new line, the function ungets the character back to stdin so the users input would be accepted.
-	if (letter != '\n') 
-	{
-		ungetc(letter, stdin);
-	}
-}
-
 /*******************************************************************************************************
  *	CheckIfContainedInStart:
  *		Check if a string is contained in another string.

@@ -7,6 +7,9 @@
 
 #define STDIN_MAX_LINE_SIZE 65536 //Which is 2^16
 
+// Flushes stdin and ensures there are no new lines in the buffer.
+void SecureStdinFlush();
+
 /************************************
  *	Get File Path and File Deletion	*
  ************************************/

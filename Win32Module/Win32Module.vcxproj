@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EnvironmentVariableHandling.c" />
+    <ClCompile Include="ExecutableFileHandling.c" />
     <ClCompile Include="FileHandling.c" />
     <ClCompile Include="FinalPathGen.c" />
     <ClCompile Include="main.c" />
@@ -142,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnvironmentVariableHandling.h" />
+    <ClInclude Include="ExecutableFileHandling.h" />
     <ClInclude Include="FileHandling.h" />
     <ClInclude Include="FinalPathGen.h" />
     <ClInclude Include="PathParser.h" />
