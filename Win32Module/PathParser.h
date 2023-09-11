@@ -1,7 +1,6 @@
 #ifndef PATH_PARSER_H
 #define PATH_PARSER_H
 
-#include <stdio.h> // geWCHAR(), ungetc() and fflush()
 #include <Windows.h> // WCHAR, LPCWSTR, DWORD, BOOL, TRUE, FALSE, wcscsat_s(), memcpy(), free(),
 #include <Shlwapi.h>
 

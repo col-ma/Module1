@@ -1,4 +1,4 @@
-#include <stdio.h> // scanf, printf
+#include <stdio.h> // scanf, printf, getchar(), ungetc() and fflush()
 #include <Windows.h>
 
 #include "FileHandling.h"

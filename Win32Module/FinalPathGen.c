@@ -136,6 +136,8 @@ PATHS_T StripAllUNCPathLayers(LPCWSTR lpcwPath)
     WCHAR lpwcFullFilePath[MAX_PATH] = { 0 };
     PATHS_T pathUNCError;
 
+    AssertRegularPrepend(lpwcFullFilePath);
+
     do
     {
         pathUNCError = GetLocalPathFromUncPath(lpcwPath);
@@ -158,8 +160,7 @@ PATHS_T StripAllUNCPathLayers(LPCWSTR lpcwPath)
 
 PATHS_T AssembleFullPath(LPCWSTR lpcwFilePath)
 {
-    WCHAR lpwcExpandedFilePath[MAX_PATH] = { 0 };
-    WCHAR lpwcBasicFilePath[MAX_PATH] = { 0 };
+    WCHAR lpwcFullFilePath[MAX_PATH] = { 0 };
 
     PATHS_T pathUNCError;
 
@@ -170,27 +171,16 @@ PATHS_T AssembleFullPath(LPCWSTR lpcwFilePath)
         return INVALID_CHARACTERS_IN_PATH;
     }
 
-    if (ExpandEnvironmentStrings(lpcwFilePath, lpwcExpandedFilePath, MAX_PATH) == 0)
-    {
-        DWORD dwExpandEnvironmentStringsError = GetLastError();
+    GetFullPathName(lpcwFilePath, MAX_PATH, lpwcFullFilePath, NULL);
 
-        wprintf_s(L"[ExpandEnvironmentStrings Error] : %x\n", dwExpandEnvironmentStringsError);
-
-        return INVALID_PATH_NAME;
-    }
-
-    GetFullPathName(lpwcExpandedFilePath, MAX_PATH, lpwcBasicFilePath, NULL);
-
-    AssertRegularPrepend(lpwcBasicFilePath);
-
-    pathUNCError = StripAllUNCPathLayers(lpwcBasicFilePath);
+    pathUNCError = StripAllUNCPathLayers(lpwcFullFilePath);
 
     if (pathUNCError != VALID_PATH)
     {
         return pathUNCError;
     }
 
-    wcscpy_s(lpcwFilePath, (wcslen(lpwcBasicFilePath) + 1), lpwcBasicFilePath);
+    wcscpy_s(lpcwFilePath, (wcslen(lpwcFullFilePath) + 1), lpwcFullFilePath);
 
     return VALID_PATH;
 }
