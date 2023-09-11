@@ -5,6 +5,7 @@
 #include "PathValidation.h"
 #include "UNCPathHandling.h"
 #include "EnvironmentVariableHandling.h"
+#include "FinalPathGen.h"
 
 #define STDIN_MAX_LINE_SIZE 65536 //Which is 2^16
 

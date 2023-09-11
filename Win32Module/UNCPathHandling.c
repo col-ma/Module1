@@ -1,5 +1,17 @@
 #include "UNCPathHandling.h"
 
+BOOL RemoveBackslashAtEnd(WCHAR* lpcwPath)
+{
+    BOOL bThereIsABackslash = (lpcwPath[wcslen(lpcwPath) - 1] == L'\\');
+
+    if (bThereIsABackslash)
+    {
+        lpcwPath[wcslen(lpcwPath) - 1] = L'\0';
+    }
+
+    return bThereIsABackslash;
+}
+
 DWORD GetLocalPathByUncServerArndSharePath(LPCWSTR lpcwServerName, LPCWSTR lpcwShare, LPCWSTR lpcwLocalPath)
 {
     PSHARE_INFO_502 BufPtr;

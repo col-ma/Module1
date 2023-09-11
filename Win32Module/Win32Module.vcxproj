@@ -131,6 +131,7 @@
     <ClCompile Include="CMDHandler.c" />
     <ClCompile Include="EnvironmentVariableHandling.c" />
     <ClCompile Include="FileHandling.c" />
+    <ClCompile Include="FinalPathGen.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="PathParser.c" />
     <ClCompile Include="PathValidation.c" />
@@ -144,6 +145,7 @@
     <ClInclude Include="CMDHandler.h" />
     <ClInclude Include="EnvironmentVariableHandling.h" />
     <ClInclude Include="FileHandling.h" />
+    <ClInclude Include="FinalPathGen.h" />
     <ClInclude Include="PathParser.h" />
     <ClInclude Include="PathValidation.h" />
     <ClInclude Include="SecureUserInterface.h" />

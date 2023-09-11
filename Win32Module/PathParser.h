@@ -44,8 +44,6 @@ BOOL EscapeCharactersHandling(LPCWSTR lpcwPath);
 
 BOOL HandleSpecialCharacters(LPCWSTR lpcwPath);
 
-BOOL RemoveBackslashAtEnd(WCHAR* lpcwPath);
-
 BOOL AssertRegularPrepend(WCHAR* lpPath);
 
 #endif // __PATH_PARSER_H

@@ -182,20 +182,6 @@ HANDLE CreateFileHandle(LPCWSTR filePath, DWORD dwCreationDispositions, DWORD dw
     return hFile;
 }
 
-BOOL CreateDirectoryHandle(WCHAR * directoryPath) 
-{
-    if (!CreateDirectory(directoryPath, NULL)) {
-        DWORD dwCreateDirectoryError = GetLastError();
-
-        if (dwCreateDirectoryError == ERROR_PATH_NOT_FOUND) {
-            wprintf_s(L"[CreateDirectoryHandle]\n\tFor Path : %s Error code : %x\n", directoryPath, dwCreateDirectoryError);
-        }
-        return FALSE;
-    }
-
-    return TRUE;
-}
-
 HANDLE CreateFileHierarchy(LPCWSTR filePath)
 {
     WCHAR parsedFilePath[MAX_PATH] = { 0 };
@@ -220,9 +206,13 @@ HANDLE CreateFileHierarchy(LPCWSTR filePath)
             else
             {
                 // If it did not got to the end of the path, the current path is of a directory which does not exist.
-                if (!CreateDirectoryHandle(parsedFilePath))
+                if (!CreateDirectory(parsedFilePath, NULL))
                 {
                     DWORD dwCreateDirectoryError = GetLastError();
+
+                    if (dwCreateDirectoryError == ERROR_PATH_NOT_FOUND) {
+                        wprintf_s(L"[CreateDirectoryHandle]\n\tFor Path : %s Error code : %x\n", parsedFilePath, dwCreateDirectoryError);
+                    }
 
                     return INVALID_HANDLE_VALUE;
                 }

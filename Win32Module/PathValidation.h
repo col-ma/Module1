@@ -4,6 +4,7 @@
 
 #include "FileHandling.h"
 #include "PathParser.h"
+#include "FinalPathGen.h"
 
 #define MAX_BUF 1024
 
@@ -36,9 +37,6 @@ BOOL IsPathExecutable(LPCWSTR lpcwFilePath);
 // Gets a Path and determines if the path is evil.
 BOOL IsPathEvil(LPCWSTR filePath);
 
-// Creates the true and final path by opening the file.
-DWORD GetFinalPathByExistingFile(LPCWSTR lpcwFilePath, LPCWSTR lpcwFinalPath);
-
 // Generates a final Path to a file and determines if the path is evil.
 BOOL IsFullPathEvil(LPCWSTR filePath);
 
@@ -47,12 +45,3 @@ PATHS_T ValidPathInNonExistingPath(LPCWSTR filePath, LPCWSTR parsedFilePath);
 
 // Validates inputed path.
 PATHS_T PathIsValid(LPCWSTR filePath);
-
-BOOL GetFinalPathAndItParts(LPCWSTR lpcwFilePath, LPCWSTR lpcwFullPath, LPCWSTR lpcwParsedPath, LPCWSTR lpcwPrevParsedPath, LPCWSTR lpcwPrevCurrentSteps);
-
-BOOL GetTrueLongPath(LPCWSTR lpcwPath);
-
-BOOL AssembleFinalFullLongPath(LPCWSTR lpcwValidPath, LPCWSTR lpcwNonExistingPath, LPCWSTR lpcwFullPath, BOOL bCurrentParsedPathIsValid);
-
-// Generates the true full path of a file, removing the shortcuts and etc...
-BOOL GetTrueFullPath(WCHAR * lpcwFilePath, LPCWSTR lpcwFullPath);

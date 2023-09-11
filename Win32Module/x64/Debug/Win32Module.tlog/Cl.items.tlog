@@ -1,8 +1,0 @@
-C:\Users\Michael\source\repos\Win32Module\Win32Module\CMDHandler.c;C:\Users\Michael\source\repos\Win32Module\Win32Module\x64\Debug\CMDHandler.obj
-C:\Users\Michael\source\repos\Win32Module\Win32Module\EnvironmentVariableHandling.c;C:\Users\Michael\source\repos\Win32Module\Win32Module\x64\Debug\EnvironmentVariableHandling.obj
-C:\Users\Michael\source\repos\Win32Module\Win32Module\FileHandling.c;C:\Users\Michael\source\repos\Win32Module\Win32Module\x64\Debug\FileHandling.obj
-C:\Users\Michael\source\repos\Win32Module\Win32Module\main.c;C:\Users\Michael\source\repos\Win32Module\Win32Module\x64\Debug\main.obj
-C:\Users\Michael\source\repos\Win32Module\Win32Module\PathParser.c;C:\Users\Michael\source\repos\Win32Module\Win32Module\x64\Debug\PathParser.obj
-C:\Users\Michael\source\repos\Win32Module\Win32Module\PathValidation.c;C:\Users\Michael\source\repos\Win32Module\Win32Module\x64\Debug\PathValidation.obj
-C:\Users\Michael\source\repos\Win32Module\Win32Module\SecureUserInterface.c;C:\Users\Michael\source\repos\Win32Module\Win32Module\x64\Debug\SecureUserInterface.obj
-C:\Users\Michael\source\repos\Win32Module\Win32Module\UNCPathHandling.c;C:\Users\Michael\source\repos\Win32Module\Win32Module\x64\Debug\UNCPathHandling.obj

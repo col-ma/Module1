@@ -264,18 +264,6 @@ BOOL HandleSpecialCharacters(LPCWSTR lpcwPath)
 	return EscapeCharactersHandling(lpcwPath);
 }
 
-BOOL RemoveBackslashAtEnd(WCHAR * lpcwPath)
-{
-	BOOL bThereIsABackslash = (lpcwPath[wcslen(lpcwPath) - 1] == L'\\');
-
-	if (bThereIsABackslash)
-	{
-		lpcwPath[wcslen(lpcwPath) - 1] = L'\0';
-	}
-
-	return bThereIsABackslash;
-}
-
 BOOL AssertRegularPrepend(WCHAR* lpPath)
 {
 	LPCWSTR lpIrregularPrepend = L"\\\\.\\";

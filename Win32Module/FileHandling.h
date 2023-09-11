@@ -34,8 +34,5 @@ BOOL ReadTheFile(LPCWSTR filePath, WCHAR* bufferToWrite, DWORD dwMaxBufferSizeTo
 // File Hierarchy Creation
 HANDLE CreateFileHandle(LPCWSTR filePath, DWORD dwCreationDispositions, DWORD dwFlagsAndAttributes);
 
-// Creates Directory.
-BOOL CreateDirectoryHandle(LPCWSTR directoryPath);
-
 // Creates the File handle.
 HANDLE CreateFileHierarchy(LPCWSTR filePath);
