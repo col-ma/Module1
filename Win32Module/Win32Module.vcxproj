@@ -128,7 +128,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CMDHandler.c" />
     <ClCompile Include="EnvironmentVariableHandling.c" />
     <ClCompile Include="FileHandling.c" />
     <ClCompile Include="FinalPathGen.c" />
@@ -142,7 +141,6 @@
     <None Include="main.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CMDHandler.h" />
     <ClInclude Include="EnvironmentVariableHandling.h" />
     <ClInclude Include="FileHandling.h" />
     <ClInclude Include="FinalPathGen.h" />

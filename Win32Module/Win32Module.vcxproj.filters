@@ -36,9 +36,6 @@
     <ClCompile Include="EnvironmentVariableHandling.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CMDHandler.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FinalPathGen.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -65,9 +62,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnvironmentVariableHandling.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CMDHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FinalPathGen.h">
