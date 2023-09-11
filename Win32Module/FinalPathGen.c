@@ -23,7 +23,6 @@ DWORD GetFinalPathByExistingFile(LPCWSTR lpcwFilePath, LPCWSTR lpcwFinalPath)
 
     GetFinalPathNameByHandle(hFile, lpcwFinalPath, MAX_PATH, FILE_NAME_OPENED);
 
-
     CloseHandle(hFile);
 
     return ERROR_SUCCESS;

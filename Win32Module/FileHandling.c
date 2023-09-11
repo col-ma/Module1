@@ -113,53 +113,6 @@ int DeleteTheFile(LPCWSTR filePath)
     return (!bAnswerIsYes);
 }
 
-BOOL WriteToTheFile(HANDLE hFile, LPCWSTR bufferToWrite)
-{
-    DWORD dwBufferSizeToWrite   = (DWORD)wcslen(bufferToWrite) * sizeof(WCHAR);
-    DWORD dwWrittenBufferLength = 0;
-    BOOL bWriteSucceed = TRUE;
-
-    // Checks if the file is in the evil directory.
-    
-    bWriteSucceed = WriteFile(
-        hFile,
-        bufferToWrite,
-        dwBufferSizeToWrite,
-        &dwWrittenBufferLength,
-        NULL
-    );
-    
-    return bWriteSucceed;
-}
-
-BOOL ReadTheFile(LPCWSTR filePath, WCHAR* bufferToRead, DWORD dwMaxBufferSizeToRead)
-{
-    OVERLAPPED overlap = {0};
-    //DWORD dwBufferLength = 0;
-    DWORD dwReadBufferLength = 0;
-    BOOL bReadSucceed = FALSE;
-    //LPVOID buffer = (LPVOID)malloc(dwMaxBufferSizeToRead);
-
-    HANDLE hFile = CreateFileHandle(filePath, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY);
-
-    bReadSucceed = ReadFile(
-        hFile,
-        bufferToRead, //buffer,
-        dwMaxBufferSizeToRead - 1, // To be able to add a null character in the end.
-        &dwReadBufferLength, //&dwBufferLength,
-        &overlap
-    );
-
-    // Adding a null character in the end of the read line.
-    dwReadBufferLength /= sizeof(WCHAR);
-    bufferToRead[dwReadBufferLength] = L'\0';
-
-    // Closing The File
-    CloseHandle(hFile);
-
-    return bReadSucceed;
-}
-
 HANDLE CreateFileHandle(LPCWSTR filePath, DWORD dwCreationDispositions, DWORD dwFlagsAndAttributes) 
 {
     HANDLE hFile = CreateFile(

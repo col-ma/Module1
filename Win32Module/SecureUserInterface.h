@@ -28,6 +28,12 @@ void GetPathToFile(LPCWSTR filePath);
 // Chages the path to a format the rest of the program is familiar with and validates it.
 PATHS_T ValidatePath(LPCWSTR filePath);
 
+// Write To a file
+BOOL WriteToTheFile(HANDLE hFile, LPCWSTR bufferToWrite);
+
+// Read a File
+BOOL ReadTheFile(LPCWSTR filePath, WCHAR* bufferToWrite, DWORD dwMaxBufferSizeToRead);
+
 // Gets The file path and lets the user delete if it's needed. 
 int GetFilePathAndDelete(HANDLE* hFile);
 

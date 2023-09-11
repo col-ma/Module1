@@ -15,18 +15,12 @@ BOOL FileExists(WCHAR * filePath);
 // Determine if the File is a Directory
 BOOL FileIsDirectory(WCHAR* filePath);
 
-/************************************
- *	Operations on existing Files	*
- ************************************/
+/********************
+ *	File Deletion	*
+ ********************/
 // File Deletion
 int DeleteFileWithValidPath(LPCWSTR filePath);
 int DeleteTheFile(LPCWSTR filePath);
-
-// Write To a file
-BOOL WriteToTheFile(HANDLE hFile, LPCWSTR bufferToWrite);
-
-// Read a File
-BOOL ReadTheFile(LPCWSTR filePath, WCHAR* bufferToWrite, DWORD dwMaxBufferSizeToRead);
 
 /********************************
  *	Handle Creation Functions	*

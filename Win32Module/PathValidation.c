@@ -2,27 +2,14 @@
 
 BOOL IsPathEvil(LPCWSTR filePath)
 {
-    LPCWSTR lpwcEvilDir = L"c:\\evilevilevil";
-    LPCWSTR lpwcPathPrefix = L"\\\\?\\";
-    WCHAR* lpwcFullFilePath = (WCHAR*)malloc(sizeof(WCHAR) * MAX_PATH);
+    LPCWSTR lpwcEvilDir = L"\\\\?\\c:\\evilevilevil";
+    WCHAR* lpwcFilePathCopy[MAX_PATH] = { 0 };
 
-    // To be safe this function ensures the path checked is full
-    GetFullPathName(filePath, MAX_PATH, lpwcFullFilePath, NULL);
+    wcscpy_s(lpwcFilePathCopy, wcslen(filePath) + 1, filePath);
 
-    MovePointerAfterPrePend(&lpwcFullFilePath);
+    _wcslwr_s(lpwcFilePathCopy, wcslen(lpwcFilePathCopy) + 1);
 
-    _wcslwr_s(lpwcFullFilePath, MAX_PATH);
-
-    return (CheckIfContainedInStart(lpwcFullFilePath, lpwcEvilDir));
-}
-
-BOOL IsFullPathEvil(LPCWSTR filePath)
-{
-    LPCWSTR lpcwFinalPath = (WCHAR*)malloc(sizeof(WCHAR) * MAX_PATH);
-
-    GetFinalPathByExistingFile(filePath, lpcwFinalPath);
-
-    return (IsPathEvil(lpcwFinalPath));
+    return (CheckIfContainedInStart(lpwcFilePathCopy, lpwcEvilDir));
 }
 
 PATHS_T ValidPathInNonExistingPath(LPCWSTR filePath, LPCWSTR parsedFilePath)
@@ -51,7 +38,7 @@ PATHS_T ValidPathInNonExistingPath(LPCWSTR filePath, LPCWSTR parsedFilePath)
 
             if (FileExists(parsedFilePath))
             {
-                if (IsFullPathEvil(parsedFilePath))
+                if (IsPathEvil(parsedFilePath))
                 {
                     return PATH_IS_EVIL;
                 }
