@@ -15,11 +15,16 @@ BOOL FileExists(WCHAR * filePath);
 // Determine if the File is a Directory
 BOOL FileIsDirectory(WCHAR* filePath);
 
+// Validates if there is a valid path inside an invalid path.
+BOOL ValidPathInNonExistingPath(LPCWSTR filePath, LPCWSTR parsedFilePath);
+
 /********************
  *	File Deletion	*
  ********************/
-// File Deletion
+// File Deletion of a valid path
 int DeleteFileWithValidPath(LPCWSTR filePath);
+
+// Using the users input it deletes chooses wether to delete a file.
 int DeleteTheFile(LPCWSTR filePath);
 
 /********************************

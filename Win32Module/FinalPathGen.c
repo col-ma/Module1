@@ -1,5 +1,15 @@
 #include "FinalPathGen.h"
 
+/***************************************************************
+ *	GetFinalPathByExistingFile:
+ *      Gets the final path by opening the file, 
+ *      fetching the final path and closing the handle.
+ *
+ *	@param	lpcwFilePath    The original file path.
+ *	@param	lpcwFinalPath   The final path to the file.
+ *
+ *	@rerurn The error code from CreateFile function.
+ ***************************************************************/
 DWORD GetFinalPathByExistingFile(LPCWSTR lpcwFilePath, LPCWSTR lpcwFinalPath)
 {
     // To handle the directory handle creation.
@@ -28,6 +38,20 @@ DWORD GetFinalPathByExistingFile(LPCWSTR lpcwFilePath, LPCWSTR lpcwFinalPath)
     return ERROR_SUCCESS;
 }
 
+/***************************************************************************************
+ *	GetFinalPathAndItParts:
+ *      Tries get the final path by the parsed path. If the operation succseed the
+ *      function updates the previos parsed path to be the final path, and copies the
+ *      file path to the previous current steps.
+ *
+ *	@param	lpcwFilePath            The current file path.
+ *	@param	lpcwFullPath            The final path to the file.
+ *  @param	lpcwParsedPath          The the part of the file path to be checked.
+ *  @param	lpcwPrevParsedPath      The previous and checked parts of the path.
+ *  @param	lpcwPrevCurrentSteps    The previous steps that were left until completion. 
+ *
+ *	@rerurn If the current parsed path exist then True, False otherwise.
+ ***************************************************************************************/
 BOOL GetFinalPathAndItParts(LPCWSTR lpcwFilePath, LPCWSTR lpcwFullPath, LPCWSTR lpcwParsedPath, LPCWSTR lpcwPrevParsedPath, LPCWSTR lpcwPrevCurrentSteps)
 {
     BOOL bCurrentParsedPathIsValid;
@@ -42,6 +66,14 @@ BOOL GetFinalPathAndItParts(LPCWSTR lpcwFilePath, LPCWSTR lpcwFullPath, LPCWSTR 
     return bCurrentParsedPathIsValid;
 }
 
+/***********************************************************
+ *	GetTrueLongPath:
+ *      Expands a path to its long path.
+ *
+ *	@param	lpcwPath    The file path.
+ *
+ *	@rerurn If the function succseed True, False otherwise. 
+ ***********************************************************/
 BOOL GetTrueLongPath(LPCWSTR lpcwPath)
 {
     DWORD dwLongPathNameSize = GetLongPathName(lpcwPath, lpcwPath, MAX_PATH);
@@ -68,6 +100,19 @@ BOOL GetTrueLongPath(LPCWSTR lpcwPath)
     return bFunctionValid;
 }
 
+/*******************************************************************************
+ *	AssembleFinalFullLongPath:
+ *      Gets the valid part of a path, expands it to long form and then 
+ *      to the final path form and assemples the true path of the file.
+ *
+ *	@param	lpcwValidPath               The existing part of the file path.
+ *  @param	lpcwNonExistingPath         The non existing part of the file path. 
+ *  @param	lpcwFullPath                The true and full file path to be.
+ *  @param	bCurrentParsedPathIsValid   If the Valid path is the full path of 
+ *                                          the file.
+ *
+ *	@rerurn If the function succseed True, False otherwise.
+ *******************************************************************************/
 BOOL AssembleFinalFullLongPath(LPCWSTR lpcwValidPath, LPCWSTR lpcwNonExistingPath, LPCWSTR lpcwFullPath, BOOL bCurrentParsedPathIsValid)
 {
 
@@ -79,6 +124,7 @@ BOOL AssembleFinalFullLongPath(LPCWSTR lpcwValidPath, LPCWSTR lpcwNonExistingPat
 
     GetFinalPathByExistingFile(lpcwValidPath, lpcwFullPath);
 
+    // If the current path is not valid the function concatenates the non existing part of the path to the path.
     if (!bCurrentParsedPathIsValid)
     {
         if (lpcwFullPath[wcslen(lpcwFullPath) - 1] != L'\\')
@@ -92,6 +138,16 @@ BOOL AssembleFinalFullLongPath(LPCWSTR lpcwValidPath, LPCWSTR lpcwNonExistingPat
     return TRUE;
 }
 
+/***************************************************************************
+ *	GetTrueFullPath:
+ *      Goes over the path to find the existing part of the path expands    
+ *      it and outputs the full path.
+ *
+ *	@param	lpcwFilePath    The file path.
+ *  @param	lpcwFullPath    The true and full file path to be.
+ *
+ *	@rerurn If the function succseed True, False otherwise.
+ ***************************************************************************/
 BOOL GetTrueFullPath(WCHAR* lpcwFilePath, LPCWSTR lpcwFullPath)
 {
     BOOL bCurrentParsedPathIsValid = TRUE;
@@ -131,12 +187,45 @@ BOOL GetTrueFullPath(WCHAR* lpcwFilePath, LPCWSTR lpcwFullPath)
     return AssembleFinalFullLongPath(lpcwPrevParsedPath, lpcwPrevCurrentSteps, lpcwFullPath, bCurrentParsedPathIsValid);
 }
 
+/***********************************************************
+ *	AssertRegularPrepend:
+ *      Asserts there is a regular prepend, if there is no  
+ *      regular prepend it fixes it.
+ *
+ *	@param	lpPath  The file path.
+ *
+ *	@rerurn If the function found an irregular prepend  
+ *              then True, otherwise False.
+ ***********************************************************/
+BOOL AssertRegularPrepend(WCHAR* lpPath)
+{
+    LPCWSTR lpIrregularPrepend = L"\\\\.\\";
+
+    if (CheckIfContainedInStart(lpPath, lpIrregularPrepend))
+    {
+        lpPath[2] = L'?';
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+/*******************************************************************************
+ *	StripAllUNCPathLayers:
+ *      UNC path can be striped into another UNC path, this means there is the  
+ *      possability to have lots of layers of UNC. 
+ *      This function strippes all of them until it gets to a non-UNC path.
+ *
+ *	@param	lpcwPath  The file path.
+ *
+ *	@rerurn If the path is some way is invalid, it return the invalidity, 
+ *              otherwise VALID_PATH
+ *******************************************************************************/
 PATHS_T StripAllUNCPathLayers(LPCWSTR lpcwPath)
 {
     WCHAR lpwcFullFilePath[MAX_PATH] = { 0 };
     PATHS_T pathUNCError;
-
-    AssertRegularPrepend(lpwcFullFilePath);
 
     do
     {
@@ -158,11 +247,23 @@ PATHS_T StripAllUNCPathLayers(LPCWSTR lpcwPath)
     return VALID_PATH;
 }
 
+/*******************************************************************************
+ *	AssembleFullPath:
+ *      Assembles the most expended and a local version of the path win32 api 
+ *      can correctly validate and use.
+ *
+ *	@param	lpcwPath  The file path.
+ *
+ *	@rerurn If the path is some way is invalid, it return the invalidity,
+ *              otherwise VALID_PATH
+ *******************************************************************************/
 PATHS_T AssembleFullPath(LPCWSTR lpcwFilePath)
 {
     WCHAR lpwcFullFilePath[MAX_PATH] = { 0 };
 
     PATHS_T pathUNCError;
+
+    AssertRegularPrepend(lpcwFilePath);
 
     ExpendAllEnvironmentVariables(lpcwFilePath);
 

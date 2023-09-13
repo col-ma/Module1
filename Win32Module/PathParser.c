@@ -169,10 +169,21 @@ void AddPrependAtStart(LPCWSTR* lpcwPath)
 	memcpy(lpcwPath, lpcwPrependedPath, (wcslen(lpcwPrependedPath) + 1) * sizeof(WCHAR));
 }
 
-BOOL ContainsForbiddenChars(LPCWSTR lpcwForbidden, LPCWSTR lpcwPath)
+/***********************************************************************
+ *	ContainsForbiddenChars:
+ *		Determines if there are forbidden strings in the Path.	
+ *
+ *	@param	lpcwPath		A pointer to the Path.
+ * 
+ *	@return True if there is a forbidden character, False otherwise.	
+ ***********************************************************************/
+BOOL ContainsForbiddenChars(LPCWSTR lpcwPath)
 {
+	WCHAR lpcwForbidden[] = L"<>|";
+
 	UINT szForbidden = wcslen(lpcwForbidden);
 	UINT szPath = wcslen(lpcwPath);
+
 	BOOL bContainsForbiddenChars = FALSE;
 
 	if (szPath > 0)
@@ -189,6 +200,17 @@ BOOL ContainsForbiddenChars(LPCWSTR lpcwForbidden, LPCWSTR lpcwPath)
 	return bContainsForbiddenChars;
 }
 
+/***********************************************************************************
+ *	EscapeCharactersHandling:
+ *		Handles the rules of the escape character '^'. 
+ *		Which means removing it unless it has another escape character before it. 
+ *		Also it handles the '&' character which is not forbidden only when there is 
+ *		an escape character before it, as well.
+ *
+ *	@param	lpcwPath		A pointer to the Path.
+ *
+ *	@return True if there is a forbidden character, False otherwise.
+ ***********************************************************************************/
 BOOL EscapeCharactersHandling(LPCWSTR lpcwPath)
 {
 	WCHAR wcEscapeChar = L'^';
@@ -230,28 +252,20 @@ BOOL EscapeCharactersHandling(LPCWSTR lpcwPath)
 	return bPathIsValid;
 }
 
+/***********************************************************************************
+ *	HandleSpecialCharacters:
+ *		Handles the special characters in a path
+ *
+ *	@param	lpcwPath		A pointer to the Path.
+ *
+ *	@return True if there is a forbidden character in the path, False otherwise.
+ ***********************************************************************************/
 BOOL HandleSpecialCharacters(LPCWSTR lpcwPath)
 {
-	LPCWSTR lpcwFobiddenChars = L"<>|";
-
-	if (ContainsForbiddenChars(lpcwFobiddenChars, lpcwPath))
+	if (ContainsForbiddenChars(lpcwPath))
 	{
 		return FALSE;
 	}
 
 	return EscapeCharactersHandling(lpcwPath);
-}
-
-BOOL AssertRegularPrepend(WCHAR* lpPath)
-{
-	LPCWSTR lpIrregularPrepend = L"\\\\.\\";
-
-	if (CheckIfContainedInStart(lpPath, lpIrregularPrepend))
-	{
-		lpPath[2] = L'?';
-
-		return TRUE;
-	}
-
-	return FALSE;
 }

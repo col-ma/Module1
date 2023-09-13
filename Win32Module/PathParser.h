@@ -34,12 +34,13 @@ BOOL MovePointerAfterPrePend(LPCWSTR* lpcwPath);
 // Adds a prepend to a path.
 void AddPrependAtStart(LPCWSTR* lpcwPath); 
 
+// Checks if a Path contains forbiden chars.
 BOOL ContainsForbiddenChars(LPCWSTR lpcwForbidden, LPCWSTR lpcwPath);
 
+// Handles Escape charachter rules - so the path would be valid.
 BOOL EscapeCharactersHandling(LPCWSTR lpcwPath);
 
+// Handles with the special characters and its rules.
 BOOL HandleSpecialCharacters(LPCWSTR lpcwPath);
-
-BOOL AssertRegularPrepend(WCHAR* lpPath);
 
 #endif // __PATH_PARSER_H

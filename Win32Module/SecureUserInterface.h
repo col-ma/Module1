@@ -38,4 +38,4 @@ BOOL ReadTheFile(LPCWSTR filePath, WCHAR* bufferToWrite, DWORD dwMaxBufferSizeTo
 int GetFilePathAndDelete(HANDLE* hFile);
 
 // Securely writes to a file, closes it and prints its contents
-int SecureInputToFileToOutput();
+void SecureInputToFileToOutput();

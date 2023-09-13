@@ -1,5 +1,14 @@
 #include "UNCPathHandling.h"
 
+/***************************************************************
+ *	RemoveBackslashAtEnd:
+ *      Removes a backslash at the end of the path if it exist. 
+ *
+ *	@param	lpcwPath    The path to the file.
+ *
+ *	@rerurn If there was a backslash at the end then True,
+ *              False otherwise.
+ ***************************************************************/
 BOOL RemoveBackslashAtEnd(WCHAR* lpcwPath)
 {
     BOOL bThereIsABackslash = (lpcwPath[wcslen(lpcwPath) - 1] == L'\\');
@@ -12,6 +21,17 @@ BOOL RemoveBackslashAtEnd(WCHAR* lpcwPath)
     return bThereIsABackslash;
 }
 
+/*******************************************************************
+ *	GetLocalPathByUncServerArndSharePath:
+ *      Gets a local path by the server name and the share name.    
+ * 
+ *	@param	lpcwServerName  The server name.
+ *	@param	lpcwShare       The shared directory name.
+ *	@param	lpcwLocalPath   The local path of the Shared directory. 
+ *
+ *	@rerurn The return value of the NetShareGetInfo, 
+ *              i.e. the error code.
+ *******************************************************************/
 DWORD GetLocalPathByUncServerArndSharePath(LPCWSTR lpcwServerName, LPCWSTR lpcwShare, LPCWSTR lpcwLocalPath)
 {
     PSHARE_INFO_502 BufPtr;
@@ -28,6 +48,15 @@ DWORD GetLocalPathByUncServerArndSharePath(LPCWSTR lpcwServerName, LPCWSTR lpcwS
     return nasNetShareInfo;
 }
 
+/*******************************************************************
+ *	GetLocalPathFromUncPath:
+ *      Converts a UNC path  - ifi it a UNC path, to a local path.
+ *
+ *	@param	lpcwPath    The path.
+ *
+ *	@rerurn If the path is invalid in some way it return it UNC 
+ *          invalidity, otherwise VALID_PATH.
+ *******************************************************************/
 PATHS_T GetLocalPathFromUncPath(LPCWSTR lpcwPath)
 {
     LPCWSTR lpUNCPrepend = L"\\\\?\\UNC\\";

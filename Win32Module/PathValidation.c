@@ -1,5 +1,13 @@
 #include "PathValidation.h"
 
+/*******************************************************
+ *	IsPathEvil:
+ *      Determines if the given path is evil.
+ *
+ *	@param	lpcwPath  The file path.
+ *
+ *	@rerurn If the path is evil then True, else False.  
+ *******************************************************/
 BOOL IsPathEvil(LPCWSTR filePath)
 {
     LPCWSTR lpwcEvilDir = L"\\\\?\\c:\\evilevilevil";
@@ -7,48 +15,21 @@ BOOL IsPathEvil(LPCWSTR filePath)
 
     wcscpy_s(lpwcFilePathCopy, wcslen(filePath) + 1, filePath);
 
+    // Lowers case the path because in windows there is no difference between high and low case.
     _wcslwr_s(lpwcFilePathCopy, wcslen(lpwcFilePathCopy) + 1);
 
     return (CheckIfContainedInStart(lpwcFilePathCopy, lpwcEvilDir));
 }
 
-PATHS_T ValidPathInNonExistingPath(LPCWSTR filePath, LPCWSTR parsedFilePath)
-{
-    BOOL bValidPathInNonExistingPath = FALSE;
-    WCHAR* filePathCopy = (WCHAR*)malloc(sizeof(WCHAR) * MAX_PATH);
-    WCHAR wcBackSlash = L'\\';
-    WCHAR wcSlash = L'/';
-
-    wcscpy_s(filePathCopy, wcslen(filePath) + 1, filePath);
-
-    while (wcscmp(filePathCopy, parsedFilePath) && !bValidPathInNonExistingPath)
-    {
-        GetAndConcatenateSteps(parsedFilePath, &filePath, MAX_PATH);
-
-        if (wcscmp(L"\\\\", parsedFilePath) != 0) {
-            bValidPathInNonExistingPath |= (
-                FileExists(parsedFilePath) &&
-                (wcscmp(filePathCopy, parsedFilePath) != 0) &&
-                (
-                    parsedFilePath[wcslen(parsedFilePath) - 1] == wcBackSlash ||
-                    parsedFilePath[wcslen(parsedFilePath) - 1] == wcSlash
-                    ) &&
-                !FileIsDirectory(parsedFilePath)
-                );
-
-            if (FileExists(parsedFilePath))
-            {
-                if (IsPathEvil(parsedFilePath))
-                {
-                    return PATH_IS_EVIL;
-                }
-            }
-        }
-    }
-
-    return (bValidPathInNonExistingPath) ? INVALID_PATH_FILE_EXIST_BUT_ITS_A_DIR_PATH : VALID_PATH;
-}
-
+/*******************************************************
+ *	PathIsValid:
+ *      Determines if the given path is Valid.
+ *
+ *	@param	lpcwPath  The file path.
+ *
+ *	@rerurn If the path is Valid then VALID_PATH, else  
+ *              the invalidity error code.
+ *******************************************************/
 PATHS_T PathIsValid(LPCWSTR filePath)
 {
     WCHAR parsedFilePath[MAX_PATH] = { 0 };
@@ -60,10 +41,12 @@ PATHS_T PathIsValid(LPCWSTR filePath)
         return INVALID_PATH_TO_DIR;
     }
 
-    if (IsPathEvil(filePath) || (ValidPathInNonExistingPath(filePath, parsedFilePath) == PATH_IS_EVIL))
+    if (IsPathEvil(filePath))
     {
         return PATH_IS_EVIL;
     }
+
+    ValidPathInNonExistingPath(filePath, parsedFilePath);
 
     if (FileExists(parsedFilePath))
     {

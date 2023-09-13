@@ -22,6 +22,12 @@ void SecureStdinFlush()
     }
 }
 
+/*******************************************
+ *	GetPathToFile:
+ *      Asks the user to get the file path. 
+ *
+ *	@param	filePath  The file path.
+ *******************************************/
 void GetPathToFile(LPCWSTR filePath) 
 {
     printf_s("Please enter a name of a file:\n");
@@ -33,6 +39,15 @@ void GetPathToFile(LPCWSTR filePath)
     _getws_s(filePath, MAX_PATH);
 }
 
+/*******************************************************
+ *	ValidatePath:
+ *      Expands the given path and validates it.
+ *
+ *	@param	lpcwPath  The file path.
+ *
+ *	@rerurn If the path is Valid then VALID_PATH, else
+ *              the invalidity error code.
+ *******************************************************/
 PATHS_T ValidatePath(LPCWSTR filePath)
 {
     PATHS_T ptPathValidity;
@@ -57,6 +72,16 @@ PATHS_T ValidatePath(LPCWSTR filePath)
     return (ptPathValidity);
 }
 
+/***************************************************************
+ *	GetFilePathAndDelete:
+ *      Gets a file path validates and it, if the path exist     
+ *      it deletes the file and creates a new file.
+ *
+ *	@param	hFile   The file handle.
+ *
+ *	@rerurn if invliad one of the error code, if the handle 
+ *              is valid then VALID_FUNCTION
+ ***************************************************************/
 int GetFilePathAndDelete(HANDLE* hFile) 
 {
     WCHAR* filePath = (WCHAR*)malloc(sizeof(WCHAR) * MAX_PATH);
@@ -124,6 +149,15 @@ int GetFilePathAndDelete(HANDLE* hFile)
     return VALID_FUNCTION;
 }
 
+/***********************************************************************
+ *	WriteToTheFile:
+ *      Writes to a file a string.
+ *
+ *	@param	hFile           The file handle, to be written.
+ *	@param	bufferToWrite   The string to write.
+ *
+ *	@rerurn If the write operation succseed then True,otherwise False.  
+ ***********************************************************************/
 BOOL WriteToTheFile(HANDLE hFile, LPCWSTR bufferToWrite)
 {
     DWORD dwBufferSizeToWrite = (DWORD)wcslen(bufferToWrite) * sizeof(WCHAR);
@@ -143,6 +177,17 @@ BOOL WriteToTheFile(HANDLE hFile, LPCWSTR bufferToWrite)
     return bWriteSucceed;
 }
 
+/***********************************************************************
+ *	ReadTheFile:
+ *      Opens a file by the path, reads it tp the buffer, and closes 
+ *      the handle.
+ *
+ *	@param	filePath                The file path to be read.
+ *	@param	bufferToRead            Buffer to copy the read string to.
+ *	@param	dwMaxBufferSizeToRead   The allocated buffer size.
+ *
+ *	@rerurn If the read operation succseed then True,otherwise False.
+ ***********************************************************************/
 BOOL ReadTheFile(LPCWSTR filePath, WCHAR* bufferToRead, DWORD dwMaxBufferSizeToRead)
 {
     OVERLAPPED overlap = { 0 };
@@ -171,7 +216,11 @@ BOOL ReadTheFile(LPCWSTR filePath, WCHAR* bufferToRead, DWORD dwMaxBufferSizeToR
     return bReadSucceed;
 }
 
-int SecureInputToFileToOutput()
+/***********************************************************************************
+ *	SecureInputToFileToOutput:
+ *      Securely inputs users data into a file the closes it reopens and reads it.  
+ ***********************************************************************************/
+void SecureInputToFileToOutput()
 {
     HANDLE* hPtrFile = (HANDLE*)malloc(sizeof(HANDLE));
     LPCWSTR stdinLineBuffer = (LPCWSTR)malloc(sizeof(WCHAR) * STDIN_MAX_LINE_SIZE);
@@ -217,6 +266,4 @@ int SecureInputToFileToOutput()
     free(filePath);
     free(stdinLineBuffer);
     free(hPtrFile);
-
-    return 0;
 }

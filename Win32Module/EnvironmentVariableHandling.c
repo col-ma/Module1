@@ -1,5 +1,13 @@
 #include "EnvironmentVariableHandling.h"
 
+/*******************************************************************
+ *	IsNumber:
+ *		Checks if the given string is of a number.
+ *
+ *	@param	lpNum	A pointer to the assumed number.
+ *
+ *	@rerurn	If the string is a number then True, False otherwise.	
+ *******************************************************************/
 BOOL IsNumber(LPCWSTR lpNum)
 {
 	BOOL bIsNumber = TRUE;
@@ -13,6 +21,21 @@ BOOL IsNumber(LPCWSTR lpNum)
 	return bIsNumber;
 }
 
+/*******************************************************************************
+ *	EnvVariableSubstringOP:
+ *		Checks if the given environment variableand the pressumed operation on 
+ *		it are syntatically valid, and if they are it outputs the substring.
+ *
+ *	@param	lpcwEnvVarOperation	A pointer to the string which pressumed to be 
+ *									the environment variable.
+ *	@param	lpcwOperation		A pointer to the string which pressumed to be 
+ *									the operation on the environment variable.
+ *	@param	lpcwEnvValue		An output of the string with the value of the 
+ *									operation.
+ *
+ *	@rerurn	If the opration was conducted successfully with no syntax issues	
+ *				then True, False otherwise.
+ *******************************************************************************/
 BOOL EnvVariableSubstringOP(LPCWSTR lpcwEnvVarOperation, LPCWSTR lpcwOperation, WCHAR * lpcwEnvValue)
 {
 	int iFirstIndex = 0;
@@ -62,7 +85,6 @@ BOOL EnvVariableSubstringOP(LPCWSTR lpcwEnvVarOperation, LPCWSTR lpcwOperation, 
 	{
 		iSecondIndex = _wtoi(lpcwSecondNum);
 	}
-
 	else
 	{
 		return FALSE;
@@ -82,6 +104,19 @@ BOOL EnvVariableSubstringOP(LPCWSTR lpcwEnvVarOperation, LPCWSTR lpcwOperation, 
 	return TRUE;
 }
 
+/*******************************************************************************
+ *	ChangeSubstring:
+ *		Replaces a substring in a given path with a new substring.
+ *
+ *	@param	uSubStrStart	The starting index of the substring to be replaced.
+ *	@param	uSubStrEnd		The end index of the substring to be replaced.
+ *	@param	lpcwPath		A pointer to the path.
+ *	@param	lpcwNewSubStr	A pointer to the new substring to be inserted to 
+ *								the path, instead the old one.
+ *
+ *	@rerurn	If the opration was conducted successfully then True, 
+ *				False otherwise.
+ *******************************************************************************/
 BOOL ChangeSubstring(UINT uSubStrStart, UINT uSubStrEnd, WCHAR* lpcwPath, LPCWSTR lpcwNewSubStr)
 {
 	LPCWSTR lpcwTempRestOfPath[MAX_PATH] = { 0 };
@@ -99,6 +134,22 @@ BOOL ChangeSubstring(UINT uSubStrStart, UINT uSubStrEnd, WCHAR* lpcwPath, LPCWST
 	return TRUE;
 }
 
+/*******************************************************************************
+ *	EnvVariableEditOP:
+ *		Checks if the given environment variableand the pressumed operation on
+ *		it are syntatically valid, and if they are it outputs 
+ *		the edited string.
+ *
+ *	@param	lpcwEnvVarOperation	A pointer to the string which pressumed to be
+ *									the environment variable.
+ *	@param	lpcwOperation		A pointer to the string which pressumed to be
+ *									the operation on the environment variable.
+ *	@param	lpcwEnvValue		An output of the string with the value of the
+ *									operation.
+ *
+ *	@rerurn	If the opration was conducted successfully with no syntax issues
+ *				then True, False otherwise.
+ *******************************************************************************/
 BOOL EnvVariableEditOP(LPCWSTR lpcwEnvVarOperation, LPCWSTR lpcwOperation, WCHAR * lpcwEnvValue)
 {
 	WCHAR lpcwEnvValueCopy[MAX_PATH] = { 0 };
@@ -142,6 +193,20 @@ BOOL EnvVariableEditOP(LPCWSTR lpcwEnvVarOperation, LPCWSTR lpcwOperation, WCHAR
 	return TRUE;
 }
 
+/*******************************************************************************
+ *	DetermineEnvVarOP:
+ *		Checks if the given environment variableis an operation on
+ *		it, and if they are it outputs the environment variable 
+ *		expression value.
+ *
+ *	@param	lpcwEnvVarOperation	A pointer to the string which pressumed to be
+ *									the environment variable.
+ *	@param	lpcwEnvValue		An output of the string with the value of the
+ *									operation.
+ *
+ *	@rerurn	Output which operation was conducted if anything, 
+ *				according to the ENVIRONMENT_VARIABLE_OPERATRION_T enum
+ *******************************************************************************/
 ENVIRONMENT_VARIABLE_OPERATRION_T DetermineEnvVarOP(LPCWSTR lpcwEnvVarOperation, LPCWSTR lpcwEnvValue)
 {
 	UINT szEnvVarOperation = wcslen(lpcwEnvVarOperation);
@@ -182,6 +247,17 @@ ENVIRONMENT_VARIABLE_OPERATRION_T DetermineEnvVarOP(LPCWSTR lpcwEnvVarOperation,
 	return REGULAR_ENVIRONMENT_VARIABLE;
 }
 
+/***********************************************************************
+ *	FindEnvironmentVariable:
+ *		Searches for an environment variable in a path, 
+ *		from the specified index.
+ *
+ *	@param	lpcwPath		A pointer to the path.
+ *	@param	uInitialIndex	The index to start the search from.
+ *
+ *	@rerurn	The index of where the pressumed envronment variable ends,	
+ *				or the EOS if it got to the end
+ ***********************************************************************/
 UINT FindEnvironmentVariable(WCHAR* lpcwPath, UINT uInitialIndex)
 {
 	UINT uStartOfEnvVar = uInitialIndex;
@@ -228,6 +304,14 @@ UINT FindEnvironmentVariable(WCHAR* lpcwPath, UINT uInitialIndex)
 	return uEndOfEnvVar;
 }
 
+/***************************************************************************
+ *	ExpendAllEnvironmentVariables:
+ *		Expands all the valid environment variable expressions in a path.		
+ *
+ *	@param	lpcwPath	A pointer to the path.
+ *
+ *	@rerurn	True if the expention was successful.
+ ***************************************************************************/
 BOOL ExpendAllEnvironmentVariables(WCHAR* lpcwPath)
 {
 	UINT uInitialIndex = 0;

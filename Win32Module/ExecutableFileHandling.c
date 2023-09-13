@@ -1,5 +1,15 @@
 #include "ExecutableFileHandling.h"
 
+/***************************************************************************************
+ *	GetExtention:
+ *      Fetches the extention of the path and outputs it.
+ *
+ *	@param	lpcwFilePath	            The path the extention would be fetched from.   
+ *	@param	lpcwFileExtention	        The fetched extention.
+ *	@param	uFileExtentionBufferSize    The allocated buffer size for the extention.
+ *
+ *	@rerurn A pointer in the path where the extention starts.
+ ***************************************************************************************/
 LPCWSTR GetExtention(LPCWSTR lpcwFilePath, LPCWSTR lpcwFileExtention, UINT uFileExtentionBufferSize)
 {
     // Assuming the path went throuh all the validations and asserts.
@@ -12,8 +22,6 @@ LPCWSTR GetExtention(LPCWSTR lpcwFilePath, LPCWSTR lpcwFileExtention, UINT uFile
 
     lpcwStartOfExtention = wcsrchr(lpcwStartOfExtention, L'.');
 
-    wprintf_s(L"lpcwStartOfExtention %s\n", lpcwStartOfExtention);
-
     if (lpcwStartOfExtention != NULL)
     {
         wcscpy_s(lpcwFileExtention, wcslen(lpcwStartOfExtention) + 1, lpcwStartOfExtention);
@@ -22,6 +30,15 @@ LPCWSTR GetExtention(LPCWSTR lpcwFilePath, LPCWSTR lpcwFileExtention, UINT uFile
     return lpcwStartOfExtention;
 }
 
+/***************************************************************
+ *	IsPathExecutableByExtention:
+ *      Determines if the current system assumes the path 
+ *      is a an executable only by the extention.
+ *
+ *	@param	lpcwFilePath    The path to the file.
+ *
+ *	@rerurn If the file is executable True, False otherwise.   
+ ***************************************************************/
 BOOL IsPathExecutableByExtention(LPCWSTR lpcwFilePath)
 {
     WCHAR lpcwExecutableSuffixes[MAX_BUF] = { 0 };
@@ -64,6 +81,15 @@ BOOL IsPathExecutableByExtention(LPCWSTR lpcwFilePath)
     return bExtentionIsExecutable;
 }
 
+/***************************************************************
+ *	IsPathExecutableByEncodement:
+ *      Determines if the current system assumes the path
+ *      is a an executable only by how the file is encoded.
+ *
+ *	@param	lpcwFilePath    The path to the file.
+ *
+ *	@rerurn If the file is executable True, False otherwise.
+ ***************************************************************/
 BOOL IsPathExecutableByEncodement(LPCWSTR lpcwFilePath)
 {
     DWORD dwFileType;
@@ -98,6 +124,15 @@ BOOL IsPathExecutableByEncodement(LPCWSTR lpcwFilePath)
     return TRUE;
 }
 
+/***************************************************************
+ *	IsPathExecutableByEncodement:
+ *      Determines if the current system assumes the path
+ *      is a an executable in every way.
+ *
+ *	@param	lpcwFilePath    The path to the file.
+ *
+ *	@rerurn If the file is executable True, False otherwise.    
+ ***************************************************************/
 BOOL IsPathExecutable(LPCWSTR lpcwFilePath)
 {
     BOOL bIsExecutableByExtention = IsPathExecutableByExtention(lpcwFilePath);
