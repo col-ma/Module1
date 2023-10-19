@@ -84,7 +84,7 @@ PATHS_T ValidatePath(LPCWSTR filePath)
  ***************************************************************/
 int GetFilePathAndDelete(HANDLE* hFile) 
 {
-    WCHAR* filePath = (WCHAR*)malloc(sizeof(WCHAR) * MAX_PATH);
+    WCHAR filePath[MAX_PATH] = { 0 };//(WCHAR*)malloc(sizeof(WCHAR) * STDIN_MAX_LINE_SIZE);
     PATHS_T ptPathValidity;
 
     GetPathToFile(filePath);
@@ -144,7 +144,7 @@ int GetFilePathAndDelete(HANDLE* hFile)
         return INVALID_HANDLE_WAS_CREATED;
     }
 
-    free(filePath);
+    //free(filePath);
 
     return VALID_FUNCTION;
 }

@@ -104,6 +104,60 @@ BOOL EnvVariableSubstringOP(LPCWSTR lpcwEnvVarOperation, LPCWSTR lpcwOperation, 
 	return TRUE;
 }
 
+typedef struct {
+	LPCWSTR lpcwSubStrStart;
+	LPCWSTR lpcwSubStrEnd;
+} SUB_STRING_VALUES_T;
+
+SUB_STRING_VALUES_T WcsStr(const WCHAR * str, const WCHAR * target)
+{
+	SUB_STRING_VALUES_T ssvSubstringVal = { NULL, NULL};
+	WCHAR * p1 = (WCHAR *)str;
+
+	if (!*target) 
+	{
+		return ssvSubstringVal;
+	}
+
+	while (*p1 != L'\0')
+	{
+		WCHAR* p1Begin = p1;
+		WCHAR * p2	   = (WCHAR *)target;
+
+		while ((*p1 != L'\0') && (*p2 != L'\0') && (*p1 == *p2 || *p2 == L'?' || *p2 == L'*')) 
+		{
+			if (*p2 == L'*')
+			{
+				p2++;
+
+				while (*p2 != L'\0' && *p1 != L'\0' && (*p2 != *p1))
+				{
+					p1++;
+				}
+
+			}
+			else
+			{
+				p1++;
+				p2++;
+			}
+
+		}
+
+		if (*p2 == L'\0')
+		{
+			ssvSubstringVal.lpcwSubStrStart = p1Begin;
+			ssvSubstringVal.lpcwSubStrEnd = p1;
+
+			return ssvSubstringVal;
+		}
+
+		p1 = p1Begin + 1;
+	}
+
+	return ssvSubstringVal;
+}
+
 /*******************************************************************************
  *	ChangeSubstring:
  *		Replaces a substring in a given path with a new substring.
@@ -157,9 +211,12 @@ BOOL EnvVariableEditOP(LPCWSTR lpcwEnvVarOperation, LPCWSTR lpcwOperation, WCHAR
 	WCHAR* lpcwSubStrToRemove = NULL;
 	WCHAR* lpcwSubStrToReplaceWith = NULL;
 
+
 	if (GetEnvironmentVariable(lpcwEnvVarOperation, lpcwEnvValue, MAX_PATH) == 0) {
 		return FALSE;
 	}
+
+	_wcslwr_s(lpcwEnvValue, wcslen(lpcwEnvValue) + 1);
 
 	wcscpy_s(lpcwEnvValueCopy, wcslen(lpcwEnvValue) + 1, lpcwEnvValue);
 
@@ -168,8 +225,9 @@ BOOL EnvVariableEditOP(LPCWSTR lpcwEnvVarOperation, LPCWSTR lpcwOperation, WCHAR
 		return FALSE;
 	}
 
-	lpcwSubStrToRemove = wcstok_s(lpcwOperation, L"=", &lpcwSubStrToReplaceWith);
+	_wcslwr_s(lpcwOperation, wcslen(lpcwOperation) + 1);
 
+	lpcwSubStrToRemove = wcstok_s(lpcwOperation, L"=", &lpcwSubStrToReplaceWith);
 
 	if (lpcwSubStrToRemove[0] == L'\0')
 	{
@@ -177,17 +235,19 @@ BOOL EnvVariableEditOP(LPCWSTR lpcwEnvVarOperation, LPCWSTR lpcwOperation, WCHAR
 	}
 
 	UINT uCurrentIndex = 0;
-	LPCWSTR lpcwSubstring = wcswcs(lpcwEnvValue, lpcwSubStrToRemove);
+	SUB_STRING_VALUES_T ssvSubStr = WcsStr(lpcwEnvValue, lpcwSubStrToRemove);
+	//LPCWSTR lpcwSubstring = ssvSubStr.lpcwSubStrStart;//wcswcs(lpcwEnvValue, lpcwSubStrToRemove);
 
-	while(lpcwSubstring != NULL)
+	while(ssvSubStr.lpcwSubStrStart != NULL)
 	{
-		uCurrentIndex = lpcwSubstring - lpcwEnvValue;
+		uCurrentIndex = ssvSubStr.lpcwSubStrStart - lpcwEnvValue;
 
-		ChangeSubstring(uCurrentIndex, uCurrentIndex+ wcslen(lpcwSubStrToRemove) - 1, lpcwEnvValue, lpcwSubStrToReplaceWith);
+		ChangeSubstring(uCurrentIndex, uCurrentIndex + ssvSubStr.lpcwSubStrEnd - ssvSubStr.lpcwSubStrStart - 1, lpcwEnvValue, lpcwSubStrToReplaceWith);
 
 		uCurrentIndex += wcslen(lpcwSubStrToReplaceWith) + 1;
 
-		lpcwSubstring = wcswcs(lpcwEnvValue, lpcwSubStrToRemove);
+		ssvSubStr = WcsStr(lpcwEnvValue, lpcwSubStrToRemove);
+		//lpcwSubstring = wcswcs(lpcwEnvValue, lpcwSubStrToRemove);
 	}
 
 	return TRUE;

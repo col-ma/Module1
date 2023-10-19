@@ -1,5 +1,6 @@
 #include "main.h"
 #include <string.h>
+#include <shlwapi.h>
 
 int main(int argc, char* argv[]) {
     //C:\Users\Michael\lol.txt
@@ -17,19 +18,51 @@ int main(int argc, char* argv[]) {
     //TestFileExists();
     //TestEscapeCharactersHandling();
 
-    TestAssembleFullPath();
+    //TestAssembleFullPath();
 
-    if (IsPathExecutable(L"C:\\Users\\Michael\\source\\repos\\Win32Module\\x64\\Debug\\Win32Module.bat"))
-    {
-        wprintf_s(L"YAY");
-    }
+    //if (IsPathExecutable(L"C:\\Users\\Michael\\source\\repos\\Win32Module\\x64\\Debug\\Win32Module.bat"))
+    //{
+    //    wprintf_s(L"YAY");
+    //}
 
-    DeleteFileWithValidPath(L"C:\\Users\\Michael\\source\\repos\\Win32Module\\Win32Module\\!FileIsDirectory(parsedFilePath)) ");
+    //IsPathExecutableByRegistery(L"htmlfile");
 
-    while(TRUE)
+    //STARTUPINFO StartupInfo;
+    //PROCESS_INFORMATION ProcessInfo;
+
+    //memset(&StartupInfo, 0, sizeof(StartupInfo));
+    //memset(&ProcessInfo, 0, sizeof(ProcessInfo));
+
+    //CreateProcess(L"C:\\Windows\\System32\\calc.exe",
+    //    NULL,
+    //    NULL,
+    //    NULL,
+    //    FALSE,
+    //    CREATE_DEFAULT_ERROR_MODE,
+    //    NULL,
+    //    NULL,
+    //    &StartupInfo,
+    //    &ProcessInfo);
+
+    //WCHAR pszOut[1000] = { 0 };
+    //DWORD dwOut = 0;
+
+    ///*queryAssoc->GetString(
+    //    ASSOCF_NONE,
+    //    ASSOCSTR_EXECUTABLE,
+    //    L".bat",
+    //    pszOut,
+    //    dwOut
+    //);*/
+
+    //wprintf_s(L"%s\n", pszOut);
+
+    /*while(TRUE)
     {
         SecureInputToFileToOutput();
-    }
+    }*/
+
+    system("start calc.exe");
 }
 
 int TestEscapeCharactersHandling()
@@ -140,7 +173,10 @@ int TestAssembleFullPath()
 
         L"%windir%\\..\\%basa:1,2%\\lol.txt",
 
-        L"z:\\temp.txt"
+        L"z:\\temp.txt",
+
+        L"C:\\Users\\Michael\\source\\repos\\Win32Module\\x64\\Debug\\Win32Module.scr",
+        L"C:\\Users\\Michael\\source\\repos\\Win32Module\\x64\\Debug\\Win32Module.exe"
     };
 
     PATHS_T pTestFilePathsReturns[] = {
@@ -189,7 +225,10 @@ int TestAssembleFullPath()
         VALID_PATH,
 
         VALID_PATH,
-        PATH_IS_EVIL
+        PATH_IS_EVIL,
+
+        PATH_IS_AN_EXECUTABLE,
+        PATH_IS_AN_EXECUTABLE
     };
 
     for (UINT i = 0; i < (sizeof(lpcwTestFilePaths) / sizeof(LPCWSTR)); i++)

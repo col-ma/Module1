@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{5511e4a3-596b-4651-9147-4a99dcbf3afe}</ProjectGuid>
-    <RootNamespace>Win32Module</RootNamespace>
+    <ProjectGuid>{bd3696a1-9413-4235-b852-f0aea7b7feb3}</ProjectGuid>
+    <RootNamespace>ProcessAnalyzer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -109,7 +109,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);Shlwapi.lib;Mpr.lib;Netapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);C:\Users\Michael\Desktop\Detours\lib.X64\detours.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -120,6 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Michael\Desktop\Detours\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,33 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EnvironmentVariableHandling.c" />
-    <ClCompile Include="ExecutableFileHandling.c" />
-    <ClCompile Include="FileHandling.c" />
-    <ClCompile Include="FinalPathGen.c" />
-    <ClCompile Include="main.c" />
-    <ClCompile Include="PathParser.c" />
-    <ClCompile Include="PathValidation.c" />
-    <ClCompile Include="SecureUserInterface.c" />
-    <ClCompile Include="UNCPathHandling.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="main.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="EnvironmentVariableHandling.h" />
-    <ClInclude Include="ExecutableFileHandling.h" />
-    <ClInclude Include="FileHandling.h" />
-    <ClInclude Include="FinalPathGen.h" />
-    <ClInclude Include="PathParser.h" />
-    <ClInclude Include="PathTypes.h" />
-    <ClInclude Include="PathValidation.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="SecureUserInterface.h" />
-    <ClInclude Include="UNCPathHandling.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Win32Module.rc" />
+    <ClCompile Include="..\Win32Module\ProcessAnalyzer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

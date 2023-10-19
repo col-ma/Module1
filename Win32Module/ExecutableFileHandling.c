@@ -30,6 +30,33 @@ LPCWSTR GetExtention(LPCWSTR lpcwFilePath, LPCWSTR lpcwFileExtention, UINT uFile
     return lpcwStartOfExtention;
 }
 
+
+BOOL IsPathExecutableByRegistery(LPCWSTR lpcwExtention)
+{
+    DWORD dwLength = 0;
+    for(int i = 1; i < ASSOCSTR_MAX;  i++)
+    {
+        BOOL bValidQueryAssoc = AssocQueryString(ASSOCF_NONE, i, lpcwExtention, NULL, NULL, &dwLength);
+
+        if (bValidQueryAssoc == TRUE)
+        {
+
+            WCHAR* lpcwStringQuery = (LPCWSTR)malloc(sizeof(WCHAR) * dwLength);
+            bValidQueryAssoc = AssocQueryString(ASSOCF_NONE, i, lpcwExtention, NULL, lpcwStringQuery, &dwLength);
+
+            wprintf_s(L"Default app is : %i , %s\n", i, lpcwStringQuery);
+            if(bValidQueryAssoc == TRUE)
+            {
+            }
+
+            free(lpcwStringQuery);
+        }
+    }
+
+    wprintf_s(L"Error :(\n");
+}
+
+
 /***************************************************************
  *	IsPathExecutableByExtention:
  *      Determines if the current system assumes the path 
@@ -56,6 +83,10 @@ BOOL IsPathExecutableByExtention(LPCWSTR lpcwFilePath)
     }
 
     _wcslwr_s(lpcwExtention, wcslen(lpcwExtention) + 1);
+
+    wprintf_s(L"Extention is %s\n", lpcwExtention);
+
+    IsPathExecutableByRegistery(lpcwExtention);
 
     // If there is no PATHEXT there is no default executable files for windows, which probably is bad.
     if (GetEnvironmentVariable(L"PATHEXT", lpcwExecutableSuffixes, MAX_PATH) == 0) {
@@ -125,7 +156,7 @@ BOOL IsPathExecutableByEncodement(LPCWSTR lpcwFilePath)
 }
 
 /***************************************************************
- *	IsPathExecutableByEncodement:
+ *	IsPathExecutable:
  *      Determines if the current system assumes the path
  *      is a an executable in every way.
  *

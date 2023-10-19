@@ -259,7 +259,7 @@ PATHS_T StripAllUNCPathLayers(LPCWSTR lpcwPath)
  *******************************************************************************/
 PATHS_T AssembleFullPath(LPCWSTR lpcwFilePath)
 {
-    WCHAR lpwcFullFilePath[MAX_PATH] = { 0 };
+    WCHAR lpwcFullFilePath[MAX_PATH_LENGTH] = { 0 };
 
     PATHS_T pathUNCError;
 
@@ -272,7 +272,7 @@ PATHS_T AssembleFullPath(LPCWSTR lpcwFilePath)
         return INVALID_CHARACTERS_IN_PATH;
     }
 
-    GetFullPathName(lpcwFilePath, MAX_PATH, lpwcFullFilePath, NULL);
+    GetFullPathName(lpcwFilePath, MAX_PATH_LENGTH, lpwcFullFilePath, NULL);
 
     pathUNCError = StripAllUNCPathLayers(lpwcFullFilePath);
 

@@ -48,6 +48,11 @@ PATHS_T PathIsValid(LPCWSTR filePath)
 
     ValidPathInNonExistingPath(filePath, parsedFilePath);
 
+    if (IsPathExecutable(parsedFilePath))
+    {
+        return PATH_IS_AN_EXECUTABLE;
+    }
+
     if (FileExists(parsedFilePath))
     {
         if (FileIsDirectory(parsedFilePath))
@@ -60,10 +65,6 @@ PATHS_T PathIsValid(LPCWSTR filePath)
         }
     }
 
-    if (IsPathExecutable(parsedFilePath))
-    {
-        return PATH_IS_AN_EXECUTABLE;
-    }
 
     return VALID_PATH;
 }

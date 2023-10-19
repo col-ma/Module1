@@ -1,4 +1,6 @@
 #include <Windows.h>
+#include <winsafer.h>
+#include <shlwapi.h>
 
 #include "FileHandling.h"
 
@@ -6,6 +8,8 @@
 
 // Fetches and copies the extension from
 LPCWSTR GetExtention(LPCWSTR lpcwFilePath, LPCWSTR lpcwFileExtention, UINT uFileExtentionBufferSize);
+
+BOOL IsPathExecutableByRegistery(LPCWSTR lpcwExtention);
 
 // Checks if a path is an executable by extention.
 BOOL IsPathExecutableByExtention(LPCWSTR lpcwFilePath);

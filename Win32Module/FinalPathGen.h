@@ -5,6 +5,8 @@
 #include "UNCPathHandling.h"
 #include "EnvironmentVariableHandling.h"
 
+#define MAX_PATH_LENGTH 2048
+
 // Creates the true and final path by opening the file.
 DWORD GetFinalPathByExistingFile(LPCWSTR lpcwFilePath, LPCWSTR lpcwFinalPath);
 
